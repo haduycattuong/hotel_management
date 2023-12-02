@@ -22,23 +22,39 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.name
 
+
+class GuestType(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type = Column(String(50), nullable=False)
+    price = Column(float, nullable=False, default=0)
+
+    def __str__(self):
+        return self.type
 class Guest(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     fullname = Column(String(100), nullable=False)
     cccd = Column(Integer, nullable=False)
     address = Column(String(100), nullable=True)
 
+    guest_type_id = Column(Integer, ForeignKey(GuestType.id), nullable=False)
+
+    def __str__(self):
+        return self.fullname
 class RoomType(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(50), nullable=False, unique=True)
-    price = Column(Float, default=0)
+    price = Column(Float, nullable=False, default=0)
 
+    def __str__(self):
+        return self.type
 class Hotel(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
     description = Column(String(100), nullable=True)
     address  = Column(String(100), nullable=True)
 
+    def __str__(self):
+        return self.name
 class Booking(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
 
@@ -51,12 +67,29 @@ class Room(db.Model):
     hotel_id = Column(Integer, ForeignKey(Hotel.id), nullable=False)
     type_id = Column(Integer, ForeignKey(RoomType.id), nullable=False)
 
+    def __str__(self):
+        return self.name
 class Booking_Room(db.Model):
     booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
     room_id = Column(Integer, ForeignKey(Room.id), nullable=False)
     booked_date = Column(String(50), nullable=False)
 
+class PaymentMethod(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    method = Column(String(50), nullable=False)
 
+    def __str__(self):
+        return self.method
+
+class Payment(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=False)
+    description = Column(String(100), nullable=True)
+    booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
+    pay_type_id = Column(Integer, ForeignKey(PaymentMethod.id), nullable=False)
+    
+    def __str__(self):
+        return self.name
 
 
 
