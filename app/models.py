@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, DateTime, DECIMAL
 from sqlalchemy.orm import relationship
 from app import db
 from flask_login import UserMixin
@@ -23,28 +23,34 @@ class User(db.Model, UserMixin):
         return self.name
 
 
-class GuestType(db.Model):
+class Guest_Type(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    type = Column(String(50), nullable=False)
-    price = Column(float, nullable=False, default=0)
+    type = Column(String(50), nullable=False, unique=True)
+    price = Column(DECIMAL, nullable=False, default=0)
+    start_date = Column(DateTime, nullable=False)
+    end_date = Column(DateTime, nullable=False)
 
+    guests = relationship("Guest", backref="guest_type")
     def __str__(self):
         return self.type
+
 class Guest(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    fullname = Column(String(100), nullable=False)
-    cccd = Column(Integer, nullable=False)
+    guest_type_id = Column(Integer, ForeignKey(Guest_Type.id), nullable=False)
+    full_name = Column(String(100), nullable=False)
+    cccd = Column(Integer, nullable=False, unique=True)
     address = Column(String(100), nullable=True)
 
-    guest_type_id = Column(Integer, ForeignKey(GuestType.id), nullable=False)
+    bookings = relationship("Booking", backref="guest")
 
     def __str__(self):
         return self.fullname
-class RoomType(db.Model):
+class Room_Type(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     type = Column(String(50), nullable=False, unique=True)
-    price = Column(Float, nullable=False, default=0)
+    price = Column(DECIMAL, nullable=False, default=0)
 
+    rooms = relationship("Room", backref="room_type")
     def __str__(self):
         return self.type
 class Hotel(db.Model):
@@ -53,41 +59,61 @@ class Hotel(db.Model):
     description = Column(String(100), nullable=True)
     address  = Column(String(100), nullable=True)
 
+    rooms = relationship("Room", backref="hotel")
+
     def __str__(self):
         return self.name
 class Booking(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-
     guest_id = Column(Integer, ForeignKey(Guest.id), nullable=False)
+
+    booking_room = relationship("Booking_Room", back_populates="booking")
 
 class Room(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
+    hotel_id = Column(Integer, ForeignKey(Hotel.id), nullable=False)
+    type_id = Column(Integer, ForeignKey(Room_Type.id), nullable=False)
     name = Column(String(50), nullable=False)
     description = Column(String(100), nullable=True)
-    hotel_id = Column(Integer, ForeignKey(Hotel.id), nullable=False)
-    type_id = Column(Integer, ForeignKey(RoomType.id), nullable=False)
+
+    booking_room = relationship("Booking_Room", back_populates="room")
 
     def __str__(self):
         return self.name
+class Num_Guest(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    size = Column(Integer, nullable=False)
+    price = Column(Float, default=0)
+
+
 class Booking_Room(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
     booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
     room_id = Column(Integer, ForeignKey(Room.id), nullable=False)
-    booked_date = Column(String(50), nullable=False)
+    created_at = Column(DateTime, nullable=False)
 
-class PaymentMethod(db.Model):
+    booking = relationship("Booking", back_populates="booking_room")
+    room = relationship("Room", back_populates="booking_room")
+    payment = relationship("Payment", back_populates="booking_room")
+
+    
+class Payment_Method(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     method = Column(String(50), nullable=False)
+
+    payments = relationship("Payment", backref="payment_method")
 
     def __str__(self):
         return self.method
 
 class Payment(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
+    booking_room_id = Column(Integer, ForeignKey(Booking_Room.id), nullable=False)
+    pay_method_id = Column(Integer, ForeignKey(Payment_Method.id), nullable=False)
+    created_at = Column(DateTime, nullable=False)
     description = Column(String(100), nullable=True)
-    booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
-    pay_type_id = Column(Integer, ForeignKey(PaymentMethod.id), nullable=False)
     
+
     def __str__(self):
         return self.name
 
