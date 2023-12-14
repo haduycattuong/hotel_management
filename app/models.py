@@ -24,7 +24,7 @@ class Hotel(db.Model):
 
 class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    hotel_id = Column(Integer, ForeignKey=True, nullable=False)
+    hotel_id = Column(Integer, ForeignKey=(Hotel.id), nullable=False)
     full_name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
