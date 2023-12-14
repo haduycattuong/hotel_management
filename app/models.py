@@ -9,15 +9,30 @@ class UserRoleEnum(enum.Enum):
     USER = 1
     ADMIN = 2
 
+class Hotel(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=False)
+    description = Column(String(100), nullable=True)
+    address  = Column(String(100), nullable=True)
+
+    rooms = relationship("Room", backref="hotel")
+    User = relationship("User", backref="hotel")
+
+    def __str__(self):
+        return self.name
+
 
 class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
+    hotel_id = Column(Integer, ForeignKey=True, nullable=False)
+    full_name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
     avatar = Column(String(100),
                     default='https://res.cloudinary.com/dxxwcby8l/image/upload/v1690461425/bqjr27d0xjx4u78ghp3s.jpg')
     user_role = Column(Enum(UserRoleEnum), default=UserRoleEnum.USER)
+    start_date = Column(DateTime, nullable=False)
+    end_date = Column(DateTime, nullable=False)
 
     def __str__(self):
         return self.name
@@ -31,8 +46,6 @@ class Guest_Type(db.Model):
     end_date = Column(DateTime, nullable=False)
 
     guests = relationship("Guest", backref="guest_type")
-    def __str__(self):
-        return self.type
 
 class Guest(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -45,29 +58,16 @@ class Guest(db.Model):
 
     def __str__(self):
         return self.fullname
+
 class Room_Type(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    type = Column(String(50), nullable=False, unique=True)
+    type = Column(String(50), nullable=False)
     price = Column(DECIMAL, nullable=False, default=0)
+    capacity = Column(Integer, nullable=False)
+    start_date = Column(DateTime, nullable=False)
+    end_date = Column(DateTime, nullable=False)
 
     rooms = relationship("Room", backref="room_type")
-    def __str__(self):
-        return self.type
-class Hotel(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False)
-    description = Column(String(100), nullable=True)
-    address  = Column(String(100), nullable=True)
-
-    rooms = relationship("Room", backref="hotel")
-
-    def __str__(self):
-        return self.name
-class Booking(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    guest_id = Column(Integer, ForeignKey(Guest.id), nullable=False)
-
-    booking_room = relationship("Booking_Room", back_populates="booking")
 
 class Room(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -80,10 +80,26 @@ class Room(db.Model):
 
     def __str__(self):
         return self.name
+
 class Num_Guest(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     size = Column(Integer, nullable=False)
     price = Column(Float, default=0)
+    start_date = Column(DateTime, nullable=False)
+    end_date = Column(DateTime, nullable=False)
+
+class Booking(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    guest_id = Column(Integer, ForeignKey(Guest.id), nullable=False)
+    room_id = Column(Integer, ForeignKey(Room.id), nullable=False)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    num_guest_id = Column(Integer, ForeignKey(Num_Guest.id), nullable=False)
+    check_in = Column(DateTime, nullable=False)
+    check_out = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+
+    booking_room = relationship("Booking_Room", back_populates="booking")
+
 
 
 class Booking_Room(db.Model):
@@ -108,7 +124,7 @@ class Payment_Method(db.Model):
 
 class Payment(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
-    booking_room_id = Column(Integer, ForeignKey(Booking_Room.id), nullable=False)
+    booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
     pay_method_id = Column(Integer, ForeignKey(Payment_Method.id), nullable=False)
     created_at = Column(DateTime, nullable=False)
     description = Column(String(100), nullable=True)
