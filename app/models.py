@@ -1,10 +1,12 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, DateTime, DECIMAL
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, DateTime, DECIMAL, MetaData, Table
+from sqlalchemy.orm import relationship, DeclarativeBase
 from app import db
 from flask_login import UserMixin
 import enum
 
 
+class Base(DeclarativeBase):
+    pass
 class UserRoleEnum(enum.Enum):
     USER = 1
     ADMIN = 2
@@ -16,7 +18,7 @@ class Hotel(db.Model):
     address  = Column(String(100), nullable=True)
 
     rooms = relationship("Room", backref="hotel")
-    User = relationship("User", backref="hotel")
+    users = relationship("User", backref="hotel")
 
     def __str__(self):
         return self.name
@@ -76,7 +78,6 @@ class Room(db.Model):
     name = Column(String(50), nullable=False)
     description = Column(String(100), nullable=True)
 
-    booking_room = relationship("Booking_Room", back_populates="room")
 
     def __str__(self):
         return self.name
@@ -88,29 +89,32 @@ class Num_Guest(db.Model):
     start_date = Column(DateTime, nullable=False)
     end_date = Column(DateTime, nullable=False)
 
+booking_room = Table("booking_room", Base.metadata,
+    Column("booking_id", Integer, 
+           ForeignKey("Booking.id", onupdate='CASCADE', ondelete='CASCADE'), primary_key=True),
+    Column("room_id", Integer,
+           ForeignKey("Room.id", onupdate='CASCADE', ondelete='CASCADE'), primary_key=True)
+)
 class Booking(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     guest_id = Column(Integer, ForeignKey(Guest.id), nullable=False)
-    room_id = Column(Integer, ForeignKey(Room.id), nullable=False)
+    rooms = relationship("Room", secondary=booking_room, backref="booking", viewonly=False)
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     num_guest_id = Column(Integer, ForeignKey(Num_Guest.id), nullable=False)
+
+
     check_in = Column(DateTime, nullable=False)
     check_out = Column(DateTime, nullable=False)
     created_at = Column(DateTime, nullable=False)
 
-    booking_room = relationship("Booking_Room", back_populates="booking")
 
 
 
-class Booking_Room(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
-    room_id = Column(Integer, ForeignKey(Room.id), nullable=False)
-    created_at = Column(DateTime, nullable=False)
-
-    booking = relationship("Booking", back_populates="booking_room")
-    room = relationship("Room", back_populates="booking_room")
-    payment = relationship("Payment", back_populates="booking_room")
+# class Booking_Room(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False)
+#     room_id = Column(Integer, ForeignKey(Room.id), nullable=False)
+#     created_at = Column(DateTime, nullable=False)
 
     
 class Payment_Method(db.Model):
