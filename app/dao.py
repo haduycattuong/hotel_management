@@ -1,4 +1,4 @@
-from app.models import Category, Product, User
+from app.models import User, Room, Room_Type, Booking, Payment
 from app import app
 import hashlib
 
@@ -14,7 +14,8 @@ import hashlib
 
 
 
-
+def load_rooms():
+    return Room.query.all()
 
 def get_user_by_id(id):
     return User.query.get(id)

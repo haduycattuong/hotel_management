@@ -7,7 +7,16 @@ from flask_login import login_user
 
 
 
+@app.route('/admin/login', methods=['post'])
+def login_admin_process():
+    username = request.form.get('username')
+    password = request.form.get('password')
 
+    user = dao.auth_user(username=username, password=password)
+    if user:
+        login_user(user=user)
+
+    return redirect('/admin')
 
 @login.user_loader
 def load_user(user_id):
