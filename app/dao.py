@@ -1,5 +1,6 @@
-from app.models import User, Room, Room_Type, Booking, Payment
-from app import app
+from app.models import User, Room, Room_Type, Booking, Payment, Payment_Method, Guest, Booking_Status, Additional_Price, Room_Img
+
+from app import app, db
 import hashlib
 
 
@@ -20,6 +21,7 @@ def load_rooms():
 def get_user_by_id(id):
     return User.query.get(id)
 
+# def add_user(username, password, avatar):
 
 def auth_user(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
