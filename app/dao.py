@@ -11,12 +11,17 @@ import hashlib
 
 
 
+def get_bookings():
+    return Booking.query.all()
 
+def get_room_types():
+    return Room_Type.query.all()
 
-
-
-def load_rooms():
+def get_rooms(kw, room_type, page):
     return Room.query.all()
+
+def count_rooms():
+    return Room.query.count()
 
 def get_user_by_id(id):
     return User.query.get(id)

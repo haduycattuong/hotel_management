@@ -3,9 +3,22 @@ from models import User, Guest, Room, Room_Type, Booking, Payment
 import dao
 from app import app, login, db
 import hashlib
+import math
 from flask_login import login_user, logout_user
 
 
+@app.route('api/rooms')
+def display_rooms():
+    kw = request.args.get('kw')
+    type_id = request.args.get('cate_id')
+    page = request.args.get('page')
+
+    rooms = dao.get_rooms(kw, type_id, page)
+    num = dao.count_rooms()
+    
+    page_size = app.config['PAGE_SIZE'] 
+    return render_template('index.html', rooms=rooms, pages=math.ceil(num/page_size))
+    
 
 
 
