@@ -1,4 +1,4 @@
-from app.models import User, Room, Room_Type, Booking, Payment, Payment_Method, Guest, Booking_Status, Additional_Price, Room_Img
+from app.models import User, Room, RoomType, Booking, Payment, PaymentMethod, Guest, BookingStatus, AdditionalPrice, RoomImg
 
 from app import app, db
 import hashlib
@@ -9,13 +9,14 @@ import hashlib
 
 
 
-
+def get_payment():
+    return Payment.query.all()
 
 def get_bookings():
     return Booking.query.all()
 
 def get_room_types():
-    return Room_Type.query.all()
+    return RoomType.query.all()
 
 def get_rooms(kw, room_type, page):
     return Room.query.all()

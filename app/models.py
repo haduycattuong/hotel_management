@@ -65,22 +65,15 @@ class AdditionalPrice(db.Model):
     updated_at = Column(DateTime, default=datetime.utcnow())
 
     rooms = relationship("Room", backref="additionalprice")
-class RoomImg(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    img_url = Column(String(100), nullable=False) 
-    created_at = Column(DateTime, default=datetime.utcnow())
-    updated_at = Column(DateTime, default=datetime.utcnow())
-
-    rooms = relationship("Room", backref="roomimg", lazy=True)
 
 class Room(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     type_id = Column(Integer, ForeignKey(RoomType.id), nullable=False)
-    img_id = Column(Integer, ForeignKey(RoomImg.id), nullable=False, default=1)
     add_price_id = Column(Integer, ForeignKey(AdditionalPrice.id), nullable=False, default=1)
 
     booking_room = relationship('BookingRoom', backref='room', lazy=True)
-    name = Column(String(50), nullable=False)
+    img = Column(String(100), nullable=True)
+    name = Column(String(50), nullable=False, unique=True)
     description = Column(String(100), nullable=True)
     foreigner_rate = Column(Float,nullable=False, default=1.5)
     is_booked = Column(Boolean, nullable=False, default=False)
@@ -171,7 +164,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
 
-        import hashlib
+        # import hashlib
 
 
         # u = User(name='Tuong', username='admin',
@@ -205,25 +198,21 @@ if __name__ == '__main__':
         # db.session.add_all([room_type1, room_type2, room_type3, room_type4])
         # db.session.commit()
 
-        # room_img1 = RoomImg(img_url="wiueqrpoqwuewq")
-        # room_img2 = RoomImg(img_url="awoeiruoweurw")
-        # db.session.add_all([room_img1, room_img2])
-        # db.session.commit()
         
         # room1 = Room(name='101', foreigner_rate=1.5, 
-        #              type_id=1, img_id=1, add_price_id=1)
+        #              type_id=1, add_price_id=1)
         # room2 = Room(name='102', foreigner_rate=1.5, 
-        #              type_id=2, img_id=2, add_price_id=1)
+        #              type_id=2, add_price_id=1)
         # room3 = Room(name='103', foreigner_rate=1.5, 
-        #              type_id=3, img_id=2, add_price_id=1)
+        #              type_id=3, add_price_id=1)
         # room4 = Room(name='201', foreigner_rate=1.5, 
-        #              type_id=4, img_id=2, add_price_id=1)
+        #              type_id=4, add_price_id=1)
         # room5 = Room(name='202', foreigner_rate=1.5, 
-        #              type_id=2, img_id=1, add_price_id=1)
+        #              type_id=2, add_price_id=1)
         # room6 = Room(name='203', foreigner_rate=1.5, 
-        #              type_id=1, img_id=1, add_price_id=1)
+        #              type_id=1, add_price_id=1)
         # room7 = Room(name='301', foreigner_rate=1.5, 
-        #              type_id=1, img_id=1, add_price_id=1)
+        #              type_id=1, add_price_id=1)
         # db.session.add_all([room1, room2, room3, room4, room5, room6, room7])
         # db.session.commit()
 
@@ -235,4 +224,4 @@ if __name__ == '__main__':
         # db.session.add_all([pay_method1, pay_method2, pay_method3])
         # db.session.commit()
 
-        # # payment1 = Payment()
+        # payment1 = Payment()
