@@ -40,7 +40,9 @@ def count_rooms():
 def get_user_by_id(id):
     return User.query.get(id)
 
-# def add_user(username, password, avatar):
+def add_user(username, password, avatar):
+    users = []
+    check_pass = password
 
 def auth_user(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
