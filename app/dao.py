@@ -1,5 +1,4 @@
-from app.models import User, Room, RoomType, Booking, Payment, PaymentMethod, Guest, BookingStatus, AdditionalPrice, RoomImg
-
+from app.models import User, Room, RoomType, Booking, Payment, PaymentMethod, Guest, BookingStatus, AdditionalPrice
 from app import app, db
 import hashlib
 
@@ -18,8 +17,22 @@ def get_bookings():
 def get_room_types():
     return RoomType.query.all()
 
-def get_rooms(kw, room_type, page):
-    return Room.query.all()
+def get_rooms(kw, room_type_id, page=None):
+    rooms = Room.query
+    if kw:
+        rooms = rooms.filter(Room.name.contains(kw))
+
+    if room_type_id:
+        rooms = rooms.filter(Room.type_id.__eq__(room_type_id))
+
+    if page:
+        page = int(page)
+        page_size = app.config['PAGE_SIZE']
+        start = (page - 1)*page_size
+
+        return rooms.slice(start, start + page_size)
+
+    return rooms.all()
 
 def count_rooms():
     return Room.query.count()

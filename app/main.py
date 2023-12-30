@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, session, jsonify
-from models import User, Guest, Room, Room_Type, Booking, Payment
+from models import User, Guest, Room, Booking, Payment
 import dao
 from app import app, login, db
 import hashlib
@@ -7,7 +7,23 @@ import math
 from flask_login import login_user, logout_user
 
 
-@app.route('api/rooms')
+
+@app.route("/")
+def index():
+    kw = request.args.get('kw')
+    room_type_id = request.args.get('room_type_id')
+    page = request.args.get('page')
+
+    rooms = dao.get_rooms(kw, room_type_id, page)
+
+    num = dao.count_rooms
+    page_size = app.config['PAGE_SIZE']
+
+    return render_template('index.html',
+                           rooms=rooms, pages=math.ceil(num/page_size))
+
+
+@app.route('/api/rooms')
 def display_rooms():
     kw = request.args.get('kw')
     type_id = request.args.get('cate_id')
@@ -49,4 +65,4 @@ def load_user(user_id):
 
 if __name__ == '__main__':
     from app import admin
-    app.run(debug=False)
+    app.run(debug=True)
