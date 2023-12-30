@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, session, jsonify
-from models import User, Guest, Room, Booking, Payment
+from app.models import User, Guest, Room, Booking, Payment
 import dao
 from app import app, login, db
 import hashlib
@@ -16,11 +16,11 @@ def index():
 
     rooms = dao.get_rooms(kw, room_type_id, page)
 
-    num = dao.count_rooms
+    num = dao.count_rooms()
     page_size = app.config['PAGE_SIZE']
 
     return render_template('index.html',
-                           rooms=rooms, pages=math.ceil(num/page_size))
+                           rooms=rooms, pages=math.ceil(num/app.config['PAGE_SIZE']))
 
 
 @app.route('/api/rooms')
