@@ -67,7 +67,7 @@ class RoomView(AuthenticatedAdmin):
 class RoomTypeView(AuthenticatedAdmin):
     column_list = ['id', 'type', 'price', 'max_capacity', 'rooms']    
     column_searchable_list = ['type', 'price']
-    column_editable_list = ['type', 'price', 'max_capacity']
+    column_editable_list = ['type', 'price', 'max_capacity', 'rooms']
 
     can_delete = True
     can_edit = True
@@ -85,7 +85,7 @@ class PaymentView(AuthenticatedAdmin):
     can_export = True
 
 class PaymentMethodView(AuthenticatedAdmin):
-    column_list = ['id', 'method']    
+    column_list = ['method']    
     column_searchable_list = ['method']
     column_editable_list = ['method']
 
