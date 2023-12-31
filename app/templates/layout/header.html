@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">HOTEL BOOKING</a>
+        <a class="navbar-brand" href="#">Quản trị khách sạn</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,15 +9,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Trang chủ</a>
                 </li>
-                {% for c in categories %}
+                {% for r in rooms %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/?cate_id={{ c.id }}">{{ c.name }}</a>
+                    <a class="nav-link" href="/?room_Id={{ r.id }}">{{ r.name }}</a>
                 </li>
                 {% endfor %}
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="/cart">&#128722; Giỏ hàng <span class="badge bg-danger cart-counter">{{ cart.total_quantity }}</span></a>
-                </li>
-
             </ul>
             <form method="get" class="d-flex" action="/">
                 <input class="form-control me-2" name="kw" type="text" placeholder="Nhập từ khóa...">

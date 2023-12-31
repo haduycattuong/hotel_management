@@ -117,12 +117,10 @@ class Booking(db.Model):
 
 class BookedRoom(db.Model):
     __table_args__ = {'extend_existing': True}
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    booking_id = Column(Integer, ForeignKey(Booking.id), primary_key=True) 
+    room_id = Column(Integer, ForeignKey(Room.id), primary_key=True) 
+
     price = Column(Float, nullable=False, default=0)
-
-    booking_id = Column(Integer, ForeignKey(Booking.id), nullable=False) 
-    room_id = Column(Integer, ForeignKey(Room.id), nullable=False) 
-
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 

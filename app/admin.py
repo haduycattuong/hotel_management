@@ -4,6 +4,7 @@ from app import app, db
 from app.models import *
 from flask_login import logout_user, current_user
 from flask import redirect
+from wtforms import fields
 
 
 class AuthenticatedAdmin(ModelView):
@@ -18,7 +19,7 @@ class AuthenticatedUser(BaseView):
 
 
 class StatsView(AuthenticatedUser):
-    @expose("/api/reports")
+    @expose("/")
     def index(self):
         return self.render('admin/stats.html')
 
@@ -121,14 +122,14 @@ class BookedRoomView(AuthenticatedAdmin):
     
 
 admin = Admin(app=app, name='QUẢN TRỊ KHÁCH SẠN', template_mode='bootstrap4')
-admin.add_view(ModelView(RoomView(Room, db.session)))
-admin.add_view(ModelView(RoomTypeView(RoomType, db.session)))
-admin.add_view(ModelView(GuestView(Guest, db.session)))
-admin.add_view(ModelView(PaymentView(Payment, db.session)))
-admin.add_view(ModelView(PaymentMethodView(PaymentMethod, db.session)))
-admin.add_view(ModelView(AdditionalPriceView(AdditionalPrice, db.session)))
-admin.add_view(ModelView(BookedRoomView(BookedRoom, db.session)))
-admin.add_view(ModelView(BookingView(Booking, db.session)))
-admin.add_view(ModelView(StatusView(BookingStatus, db.session)))
+admin.add_view(RoomView(Room, db.session))
+admin.add_view(RoomTypeView(RoomType, db.session))
+admin.add_view(GuestView(Guest, db.session))
+admin.add_view(PaymentView(Payment, db.session))
+admin.add_view(PaymentMethodView(PaymentMethod, db.session))
+admin.add_view(AdditionalPriceView(AdditionalPrice, db.session))
+admin.add_view(BookedRoomView(BookedRoom, db.session))
+admin.add_view(BookingView(Booking, db.session))
+admin.add_view(StatusView(BookingStatus, db.session))
 admin.add_view(StatsView(name='Thống kê báo cáo'))
 admin.add_view(LogoutView(name='Đăng xuất'))

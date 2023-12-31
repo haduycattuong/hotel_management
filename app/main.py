@@ -4,7 +4,7 @@ import dao
 from app import app, login, db
 import hashlib
 import math
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 
 
 
@@ -48,6 +48,7 @@ def login_admin_process():
         login_user(user=user)
 
     return redirect('/admin')
+
 
 @app.route('/register', methods=['get', 'post'])
 def register_user():
