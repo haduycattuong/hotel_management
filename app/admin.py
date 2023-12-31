@@ -57,18 +57,20 @@ class StatusView(AuthenticatedAdmin):
     can_edit = True
     can_create = True
 class RoomView(AuthenticatedAdmin):
-    column_list = ['id', 'name', 'description', 'foreigner_rate']    
+    column_list = ['id', 'name', 'foreigner_rate', 'type_id', 'add_price_id']    
     column_searchable_list = ['name']
     column_editable_list = ['name', 'description', 'foreigner_rate']
 
+    column_display_all_relations = True
+    column_display_pk = True
     can_delete = True
     can_edit = True
     can_create = True
 
 class RoomTypeView(AuthenticatedAdmin):
-    column_list = ['id', 'type', 'price', 'max_capacity']    
+    column_list = ['id', 'type', 'price', 'max_capacity', 'rooms']    
     column_searchable_list = ['type', 'price']
-    column_editable_list = ['type', 'price', 'max_capacity']
+    column_editable_list = ['type', 'price', 'max_capacity', 'rooms']
 
     can_delete = True
     can_edit = True
@@ -85,9 +87,9 @@ class PaymentView(AuthenticatedAdmin):
     can_export = True
 
 class PaymentMethodView(AuthenticatedAdmin):
-    column_list = ['id', 'method']    
+    column_list = ['method']    
     column_searchable_list = ['method']
-    column_editable_list = ['id', 'method']
+    column_editable_list = ['method']
 
     can_delete = True
     can_edit = True
