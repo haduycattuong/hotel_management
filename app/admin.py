@@ -29,14 +29,14 @@ class LogoutView(AuthenticatedUser):
     def index(self):
         logout_user()
         return redirect('/admin')
-
         
-class AdminView(AuthenticatedAdmin):
+class AdminView(ModelView):
   can_delete = False
   can_edit = False
   can_create = True
 
 class BookingView(AuthenticatedAdmin):
+    column_display_all_relations = True
     column_list = ['id', 'guest_id', 'status_id', 'num_guest', 'has_foreigner', 'booking_price',
                    'check_in', 'check_out', 'created_at']    
     column_searchable_list = ['guest_id', 'status_id', 'num_guest', 'has_foreigner', 'booking_price',
@@ -48,25 +48,24 @@ class BookingView(AuthenticatedAdmin):
     can_edit = True
 
 class StatusView(AuthenticatedAdmin):
-    column_list = ['id', 'status']    
+    column_list = ['id', 'status', 'bookings']    
     column_searchable_list = ['status']
     column_editable_list = ['status']
 
-    can_export = True
     can_delete = True
     can_edit = True
     can_create = True
 class RoomView(AuthenticatedAdmin):
-    column_list = ['id', 'name', 'description', 'foreigner_rate']    
+    column_list = ['id', 'name', 'foreigner_rate', 'type_id', 'add_price_id']    
     column_searchable_list = ['name']
-    column_editable_list = ['name', 'description', 'foreigner_rate']
-
-    can_delete = True
-    can_edit = True
-    can_create = True
+    column_editable_list = ['name','foreigner_rate', 'img']
+    column_display_pk = True
+    can_export = True
+    can_view_details = True
+    column_display_all_relations = True
 
 class RoomTypeView(AuthenticatedAdmin):
-    column_list = ['id', 'type', 'price', 'max_capacity']    
+    column_list = ['id', 'type', 'price', 'max_capacity', 'rooms']    
     column_searchable_list = ['type', 'price']
     column_editable_list = ['type', 'price', 'max_capacity']
 
@@ -75,7 +74,8 @@ class RoomTypeView(AuthenticatedAdmin):
     can_create = True
 
 class PaymentView(AuthenticatedAdmin):
-    column_list = ['id', 'price', 'description']    
+    column_display_all_relations = True
+    column_list = ['id', 'price', 'description', 'pay_method_id']    
     column_searchable_list = ['price']
     column_editable_list = ['description', 'price']
 
@@ -87,14 +87,14 @@ class PaymentView(AuthenticatedAdmin):
 class PaymentMethodView(AuthenticatedAdmin):
     column_list = ['id', 'method']    
     column_searchable_list = ['method']
-    column_editable_list = ['id', 'method']
+    column_editable_list = ['method']
 
     can_delete = True
     can_edit = True
     can_create = True
 
 class AdditionalPriceView(AuthenticatedAdmin):
-    column_list = ['id', 'price_rate', 'price_value']    
+    column_list = ['id', 'price_rate', 'price_value', 'rooms']    
     column_searchable_list = ['price_rate', 'price_value']
     column_editable_list = ['price_rate', 'price_value']
 
@@ -127,7 +127,7 @@ admin.add_view(RoomTypeView(RoomType, db.session))
 admin.add_view(GuestView(Guest, db.session))
 admin.add_view(PaymentView(Payment, db.session))
 admin.add_view(PaymentMethodView(PaymentMethod, db.session))
-admin.add_view(AdditionalPriceView(AdditionalPrice, db.session))
+admin.add_view(ModelView(AdditionalPrice, db.session))
 admin.add_view(BookedRoomView(BookedRoom, db.session))
 admin.add_view(BookingView(Booking, db.session))
 admin.add_view(StatusView(BookingStatus, db.session))

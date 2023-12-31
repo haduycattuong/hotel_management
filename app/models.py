@@ -38,7 +38,7 @@ class Guest(db.Model):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-    bookings = relationship("Booking", backref="guest", lazy=True)
+    bookings = relationship('Booking', backref='guest', lazy=True)
 
     def __str__(self):
         return self.id + self.full_name + self.cccd
@@ -53,7 +53,7 @@ class RoomType(db.Model):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-    rooms = relationship("Room", backref="roomtype", lazy=True)
+    rooms = relationship('Room', backref='roomtype', lazy=False)
 
     def __str__(self):
         return self.id + self.type + self.price + self.max_capacity
@@ -67,15 +67,12 @@ class AdditionalPrice(db.Model):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-    rooms = relationship("Room", backref="additionalprice", lazy=True)
+    rooms = relationship('Room', backref='additionalprice', lazy=False)
 
 class Room(db.Model):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, autoincrement=True)
-    type_id = Column(Integer, ForeignKey(RoomType.id), nullable=False)
-    add_price_id = Column(Integer, ForeignKey(AdditionalPrice.id), nullable=False, default=1)
 
-    booked_room = relationship('BookedRoom', backref='room', lazy=True)
     img = Column(String(100), nullable=True)
     name = Column(String(50), nullable=False)
     description = Column(String(100), nullable=True)
@@ -84,8 +81,12 @@ class Room(db.Model):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
+    type_id = Column(Integer, ForeignKey(RoomType.id), nullable=False)
+    add_price_id = Column(Integer, ForeignKey(AdditionalPrice.id), nullable=False, default=1)
+    booked_room = relationship('BookedRoom', backref='room', lazy=False)
+
     def __str__(self):
-        return self.name
+        return self.name 
 
 class BookingStatus(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -95,7 +96,7 @@ class BookingStatus(db.Model):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-    bookings = relationship("Booking", backref="bookingstatus", lazy=True)
+    bookings = relationship('Booking', backref='bookingstatus', lazy=False)
 
 
 class Booking(db.Model):
@@ -135,7 +136,7 @@ class PaymentMethod(db.Model):
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
-    payments = relationship("Payment", backref="paymentmethod", lazy=True)
+    payments = relationship('Payment', backref='paymentmethod', lazy=False)
 
     def __str__(self):
         return self.method
