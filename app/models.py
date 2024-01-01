@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
     avatar = Column(String(100),
-                    default='https://res.cloudinary.com/dxxwcby8l/image/upload/v1690461425/bqjr27d0xjx4u78ghp3s.jpg')
+                    default='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092797/pvo703h6r92srmiioym7.jpg')
     user_role = Column(Enum(UserRoleEnum), default=UserRoleEnum.USER)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
@@ -33,6 +33,7 @@ class Guest(db.Model):
 
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
+    phone = Column(String(100), nullable=True)
     cccd = Column(String(100), nullable=True, unique=True)
     address = Column(String(100), nullable=True)
     created_at = Column(DateTime, default=datetime.now())
@@ -50,13 +51,14 @@ class RoomType(db.Model):
     type = Column(String(50), nullable=False)
     price = Column(Float, nullable=False, default=0)
     max_capacity = Column(Integer, nullable=False)
+    img = Column(String(100), nullable=True)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
     rooms = relationship('Room', backref='roomtype', lazy=False)
 
     def __str__(self):
-        return self.id + self.type + self.price + self.max_capacity
+        return self.type
 
 class AdditionalPrice(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -112,6 +114,7 @@ class Booking(db.Model):
     has_foreigner = Column(Boolean, nullable=False, default=False)
     num_guest = Column(Integer, nullable=False, default=1)
     booking_price = Column(Float, nullable=False, default=0)
+    phone = Column(String(100), nullable=True)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
@@ -199,11 +202,12 @@ if __name__ == '__main__':
         # db.session.add_all([booking_status1, booking_status2, booking_status3, booking_status4])
         # db.session.commit()
 
-        # room_type1 = RoomType(type='single', price=150, max_capacity=3)
-        # room_type2 = RoomType(type='double', price=200, max_capacity=3)
-        # room_type3 = RoomType(type='premium', price=300, max_capacity=3)
-        # room_type4 = RoomType(type='king', price=400, max_capacity=3)
-        # db.session.add_all([room_type1, room_type2, room_type3, room_type4])
+        # room_type1 = RoomType(type='single', price=150, max_capacity=3, img='image/room/room-1.jpg')
+        # room_type2 = RoomType(type='double', price=200, max_capacity=3, img='image/room/room-2.jpg')
+        # room_type3 = RoomType(type='premium', price=300, max_capacity=3, img='image/room/room-3.jpg')
+        # room_type4 = RoomType(type='king', price=400, max_capacity=3, img='image/room/room-4.jpg')
+        # room_type5 = RoomType(type='vip', price=500, max_capacity=3, img='image/room/room-5.jpg')
+        # db.session.add_all([room_type1, room_type2, room_type3, room_type4, room_type5])
         # db.session.commit()
 
         

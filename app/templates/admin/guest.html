@@ -1,0 +1,52 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                            <a href="/thuoc/create" class="btn btn-success float-right m-2">Add</a>
+                    </div>
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">CCCD</th>
+                                        <th scope="col">Bookings</th>
+                                        <th scope="col">Function</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for g in guests %}
+                                        <tr>
+                                            <th scope="row">{{g.id}}</th>
+                                            <td>{{g.first_name}}</td>
+                                            <td>{{g.last_name}}</td>
+                                            <td>{{g.cccd}}</td>
+                                            <td>{{g.bookings}}</td>
+                                            <td>
+                                                <a href="/admin/guests/update/{{g.id}}"
+                                                    class="btn btn-warning">Update</a>
+                                                <a href="/admin/guests/delete/{{g.id}}"
+                                                    class="btn btn-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

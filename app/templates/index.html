@@ -2,26 +2,26 @@
 
 {% block content %}
 <section class="container">
-    <ul class="pagination mt-1">
-        {% for i in range(pages) %}
-        <li class="page-item"><a class="page-link" href="/?page={{i+1}}">{{i+1}}</a></li>
-        {% endfor %}
-    </ul>
     <div class="row">
-        {% for r in rooms %}
-        <div class="col-xs-12 col-md-3" style="padding: 10px;">
+        {% for r in room_type %}
+        <div class="col-xs-12 col-md-4" style="padding: 10px; margin-top: 20px;">
             <div class="card">
-                <!-- <img class="card-img-top" src="{{ r.image }}" alt="Card image"> -->
+                <img class="card-img-top" src="{{ r.img }}" alt="Card image">
                 <div class="card-body">
-                    <h4 class="card-title">{{ r.name }}</h4>
+                    <h4 class="card-title">{{ r.type }}</h4>
                     <h4 class="card-title">{{ r.type_id }}</h4>
-                    <!-- <p class="card-text">{{ r.price }} VNĐ</p> -->
+                    <p class="card-text">{{ r.price }}$</p>
                     <a href="#" class="btn btn-primary">Xem chi tiết</a>
-                    <a href="#" onclick="addToCart({{r.id}}, '{{r.name}}')" class="btn btn-danger">Đặt hàng</a>
+                    <a href="#" onclick="addToCart({{r.id}}, '{{r.name}}')" class="btn btn-danger">Book</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+    <ul class="pagination mt-1">
+        {% for i in range(pages) %}
+        <li class="page-item"><a class="page-link" href="/?page={{i+1}}">{{i+1}}</a></li>
+        {% endfor %}
+    </ul>
 </section>
 {% endblock %}

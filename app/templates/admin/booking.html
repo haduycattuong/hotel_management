@@ -1,0 +1,54 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                            <a href="/thuoc/create" class="btn btn-success float-right m-2">Add</a>
+                    </div>
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Num Guest</th>
+                                        <th scope="col">Has Foreigner</th>
+                                        <th scope="col">Booking Price</th>
+                                        <th scope="col">Check In</th>
+                                        <th scope="col">Check Out</th>
+                                        <th scope="col">Function</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for b in bookings %}
+                                        <tr>
+                                            <th scope="row">{{b.id}}</th>
+                                            <td>{{b.num_guest}}</td>
+                                            <td>{{b.has_foreigner}}</td>
+                                            <td>{{b.booking_price}}</td>
+                                            <td>{{b.check_in}}</td>
+                                            <td>{{b.check_out}}</td>
+                                            <td>
+                                                <a href="/admin/bookings/update/{{b.id}}"
+                                                    class="btn btn-warning">Update</a>
+                                                <a href="/admin/bookings/delete/{{b.id}}"
+                                                    class="btn btn-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
