@@ -1,0 +1,75 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<div class="header-section">
+    <div class="bg-opacity"></div>
+    <!--Welcome secton-->
+    <div class="welcome-section">
+        <div class="container">
+            <div class="form-row">
+                <div class="in" style="display:flex; justify-content: center; margin-top: 2%">
+                    <div class="booking-box">
+                        <div class="booking-title">
+                            <h3>Book A Room</h3>
+                            <p></p>
+                        </div>
+                        <div class="booking-form">
+                            <!-- <form action="{{ url_for('hotel_index') }}"> -->
+                                <label class="booking-label" for="arriveDate">CheckIn Date</label>
+                                <div class="b-date checkin mb-15">
+                                    <input id="checkInDate" type="date" name="checkInDate" onchange="compareDate()" required>
+                                </div>
+                                <label class="booking-label" for="departureDate">CheckOut Date</label>
+                                <div class="b-date checkout mb-15">
+                                    <input id="checkOutDate" type="date" name="checkOutDate" onchange="compareDate()" required>
+                                </div>
+                                <label class="booking-label" for="type">Room type</label>
+                                <div class="select-book mb-15">
+                                    <select id="type" name="type" style="border: 1px solid white;" required>
+                                        {% for r in room_type %}
+                                        <option value="{{r}}">{{r}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <label class="booking-label" for="numberOfGuest">Number of guest</label>
+                                <div class="select-book mb-15">
+                                    <select id="numberOfGuest" name="numberOfGuest" required style="border: 1px solid white;">
+                                        <li>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                        </li>
+                                    </select>
+                                </div>
+                                <label id="hasForeignerInput" class="booking-label mb-15" for="hasForeigner">Has foreigner? <input id="hasForeigner" type="checkbox" name="hasForeigner" value="True" ></label>
+                                <div class="submit-form">
+                                    <button type="submit" class="btn btn-secondary">Book</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#arriveDate').prop('min', function(){
+       return new Date().toJSON().split('T')[0];
+    });
+    $('#departureDate').prop('min', function(){
+       return new Date().toJSON().split('T')[0];
+    });
+   function compareDate() {
+       var checkIn = document.getElementById("checkInDate").value;
+       var checkOut = document.getElementById("checkOutDate").value;
+       if (new Date(checkIn).getTime() > new Date(checkOut).getTime()) {
+             alert("Check out date must be bigger than check in date");
+             document.getElementById("checkOutDate").value = null;
+             return false;
+        }
+       return true;
+   }
+</script>
+<!-- Header section end -->
+{% endblock %}
