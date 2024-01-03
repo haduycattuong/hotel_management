@@ -6,14 +6,14 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                            <a href="/thuoc/create" class="btn btn-success float-right m-2">Add</a>
+                            <a href="/room/create" class="btn btn-success float-right m-2">Add</a>
                     </div>
                     <div class="card w-100">
                         <div class="card-body">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
+                                        <th scope="col">ID</th>
                                         <th scope="col">Room name</th>
                                         <th scope="col">Image</th>
                                         <th scope="col">Foreigner Rate</th>
@@ -32,8 +32,8 @@
                                             <td>{{r.type_id}}</td>
                                             <td>{{r.add_price_id}}</td>
                                             <td>
-                                                <a href="/admin/rooms/update/{{r.id}}"
-                                                    class="btn btn-warning">Update</a>
+                                                <a href="#"
+                                                    class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalupdate">Update</a>
                                                 <a href="/admin/rooms/delete/{{r.id}}"
                                                     class="btn btn-danger">Delete</a>
                                             </td>
@@ -44,6 +44,20 @@
                         </div>
                     </div>
                     <div class="col-md-12">
+                        <div id="modalupdate" class="modal fade" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Update Information</h4>
+                                    </div>
+                                    <div>
+                                        <form action="" method="POST"></form>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 

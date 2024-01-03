@@ -42,7 +42,7 @@ class Guest(db.Model):
     bookings = relationship('Booking', backref='guest', lazy=True)
 
     def __str__(self):
-        return self.id + self.full_name + self.cccd
+        return self.first_name
 
 class RoomType(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -60,16 +60,7 @@ class RoomType(db.Model):
     def __str__(self):
         return self.type
 
-class AdditionalPrice(db.Model):
-    __table_args__ = {'extend_existing': True}
-    id = Column(Integer, primary_key=True, autoincrement=True)
 
-    price_rate = Column(Float, nullable=False, default=1)
-    price_value = Column(Float, nullable=False, default=0)
-    created_at = Column(DateTime, default=datetime.now())
-    updated_at = Column(DateTime, default=datetime.now())
-
-    rooms = relationship('Room', backref='additionalprice', lazy=False)
 
 class Room(db.Model):
     __table_args__ = {'extend_existing': True}
@@ -80,11 +71,11 @@ class Room(db.Model):
     description = Column(String(100), nullable=True)
     foreigner_rate = Column(Float,nullable=False, default=1.5)
     is_booked = Column(Boolean, nullable=False, default=False)
+    add_price = Column(Float, nullable=False, default=1.25)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
     type_id = Column(Integer, ForeignKey(RoomType.id), nullable=False)
-    add_price_id = Column(Integer, ForeignKey(AdditionalPrice.id), nullable=False, default=1)
     booked_room = relationship('BookedRoom', backref='room', lazy=False)
 
     def __str__(self):
@@ -99,6 +90,9 @@ class BookingStatus(db.Model):
     updated_at = Column(DateTime, default=datetime.now())
 
     bookings = relationship('Booking', backref='bookingstatus', lazy=False)
+
+    def __str__(self):
+        return self.status
 
 
 class Booking(db.Model):
@@ -152,7 +146,7 @@ class Payment(db.Model):
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
 
     description = Column(String(100), nullable=True)
-    price = Column(Float, nullable=False, default=0)
+    total_price = Column(Float, nullable=False, default=0)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
     
@@ -189,11 +183,6 @@ if __name__ == '__main__':
         # db.session.add_all([guest1, guest2])
         # db.session.commit()
 
-        # add_price1 = AdditionalPrice(price_rate=1, price_value=0) 
-        # add_price2 = AdditionalPrice(price_rate=1.25)
-        # db.session.add_all([add_price1, add_price2])
-        # db.session.commit()
-
 
         # booking_status1 = BookingStatus(status='PENDING')
         # booking_status2 = BookingStatus(status='CANCELED')
@@ -202,33 +191,43 @@ if __name__ == '__main__':
         # db.session.add_all([booking_status1, booking_status2, booking_status3, booking_status4])
         # db.session.commit()
 
-        # room_type1 = RoomType(type='single', price=150, max_capacity=3, img='image/room/room-1.jpg')
-        # room_type2 = RoomType(type='double', price=200, max_capacity=3, img='image/room/room-2.jpg')
-        # room_type3 = RoomType(type='premium', price=300, max_capacity=3, img='image/room/room-3.jpg')
-        # room_type4 = RoomType(type='king', price=400, max_capacity=3, img='image/room/room-4.jpg')
-        # room_type5 = RoomType(type='vip', price=500, max_capacity=3, img='image/room/room-5.jpg')
+        # room_type1 = RoomType(type='single', price=150, max_capacity=3, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/vs2oaxymlefekgmmi6tl.jpg')
+        # room_type2 = RoomType(type='double', price=200, max_capacity=3, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/knphsg4zwjxpppesksrm.jpg')
+        # room_type3 = RoomType(type='premium', price=300, max_capacity=3, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092592/lccma7yonocxj3brpmj8.jpg')
+        # room_type4 = RoomType(type='king', price=400, max_capacity=3, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092592/b0letho5eeakz3jawakw.jpg')
+        # room_type5 = RoomType(type='vip', price=500, max_capacity=3, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092592/osyhglnk6eerlfgynuiz.jpg')
         # db.session.add_all([room_type1, room_type2, room_type3, room_type4, room_type5])
         # db.session.commit()
 
         
-        # room1 = Room(name='101', foreigner_rate=1.5, 
-        #              type_id=1, add_price_id=1)
-        # room2 = Room(name='102', foreigner_rate=1.5, 
-        #              type_id=2, add_price_id=1)
-        # room3 = Room(name='103', foreigner_rate=1.5, 
-        #              type_id=3, add_price_id=1)
-        # room4 = Room(name='201', foreigner_rate=1.5, 
-        #              type_id=4, add_price_id=1)
-        # room5 = Room(name='202', foreigner_rate=1.5, 
-        #              type_id=2, add_price_id=1)
-        # room6 = Room(name='203', foreigner_rate=1.5, 
-        #              type_id=1, add_price_id=1)
-        # room7 = Room(name='301', foreigner_rate=1.5, 
-        #              type_id=1, add_price_id=1)
-        # db.session.add_all([room1, room2, room3, room4, room5, room6, room7])
+        # room1 = Room(name='101', foreigner_rate=1.5, type_id=1)
+        # room2 = Room(name='102', foreigner_rate=1.5, type_id=2)
+        # room3 = Room(name='103', foreigner_rate=1.5, type_id=3)
+        # room4 = Room(name='201', foreigner_rate=1.5, type_id=4)
+        # room5 = Room(name='202', foreigner_rate=1.5, type_id=2)
+        # room6 = Room(name='203', foreigner_rate=1.5, type_id=1)
+        # room7 = Room(name='301', foreigner_rate=1.5, type_id=1)
+        # room8 = Room(name='302', foreigner_rate=1.5, type_id=5)
+        # db.session.add_all([room1, room2, room3, room4, room5, room6, room7, room8])
         # db.session.commit()
 
-        # # booking1 = Booking()
+        # booking1 = Booking(guest_id=1, status_id=3, check_in='2023-12-24', check_out='2023-12-27',
+        #                    num_guest=3, has_foreigner=False)
+        # booking2 = Booking(guest_id=1, status_id=3, check_in='2023-12-21', check_out='2023-12-23',
+        #                    num_guest=2, has_foreigner=True)
+        # booking3 = Booking(guest_id=2, status_id=1, check_in='2024-01-05', check_out='2023-01-08',
+        #                    num_guest=3, has_foreigner=True)
+        # booking4 = Booking(guest_id=2, status_id=3, check_in='2023-11-20', check_out='2023-11-24',
+        #                    num_guest=2, has_foreigner=False)
+        # db.session.add_all([booking1, booking2, booking3, booking4])
+        # db.session.commit()
+
+        # bookedroom1 = BookedRoom(booking_id=1, room_id=1)
+        # bookedroom2 = BookedRoom(booking_id=2, room_id=3)
+        # bookedroom3 = BookedRoom(booking_id=3, room_id=4)
+        # bookedroom4 = BookedRoom(booking_id=4, room_id=2)
+        # db.session.add_all([bookedroom1, bookedroom2, bookedroom3, bookedroom4])
+        # db.session.commit()
         
         # pay_method1 = PaymentMethod(method='Credit Card')
         # pay_method2 = PaymentMethod(method='Cash')
@@ -236,4 +235,8 @@ if __name__ == '__main__':
         # db.session.add_all([pay_method1, pay_method2, pay_method3])
         # db.session.commit()
 
-        # # payment1 = Payment()
+        # payment1 = Payment(booking_id=1, user_id=1, pay_method_id=2)
+        # payment2 = Payment(booking_id=2, user_id=1, pay_method_id=1)
+        # payment3 = Payment(booking_id=4, user_id=1, pay_method_id=2)
+        # db.session.add_all([payment1, payment2, payment3])
+        # db.session.commit()
