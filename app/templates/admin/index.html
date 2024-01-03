@@ -3,10 +3,10 @@
 {% block body %}
 
 {% if current_user.is_authenticated %}
-<h1 class="text-success text-center">CHÀO MỪNG ĐỀN TRANG QUẢN TRỊ!</h1>
-<h2>Chào {{ current_user.name }}!</h2>
+<h1 class="text-success text-center">WELCOME TO ADMIN PAGE!!!</h1>
+<h2 class="text-center">HI {{ current_user.name }}!</h2>
 {% else %}
-<h1 class="text-center text-info">ĐĂNG NHẬP QUẢN TRỊ</h1>
+<h1 class="text-center text-info">ADMIN LOGIN</h1>
 
 <form method="post" action="/admin/login">
   <div class="mb-3 mt-3">
