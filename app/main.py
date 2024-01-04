@@ -209,6 +209,7 @@ def room_list():
 
 
 @app.route('/admin/login', methods=['post'])
+@login_required
 def login_admin_process():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -229,7 +230,7 @@ def register_user():
     confirm_pass = request.form.get('confirm-pass')
 
     user_exists = User.query.filter_by(username=username).first() is not None
-    if password.__eq__(confirm_pass):
+    if password.__eq__(confirm_pass) and user_exists:
         try:
             dao.register(name=name, username=username, password=password)
         except:
@@ -259,6 +260,7 @@ def load_user(user_id):
     return dao.get_user_by_id(user_id)
 
 @app.route('/logout')
+@login_required
 def user_logout():
     logout_user()
     return redirect('/')

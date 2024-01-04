@@ -232,7 +232,7 @@ def register(name, username, password, avatar):
     users = []
     check_pass = password
     if not strong_pass(check_pass):
-        raise Exception("Password invalid")
+        raise Exception("Password is not strong enough")
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     for u in User.query.all():
         if u.username == username:
@@ -249,11 +249,12 @@ def register(name, username, password, avatar):
 
 
 def strong_pass(client_pass):
-    pass_length = len(client_pass) > 8
+    pass_length = len(client_pass) > 6
     pass_up = re.search(r"[A-Z]", client_pass) is not None
     pass_low = re.search(r"[a-z]", client_pass) is not None
-    pass_ok = not (pass_length or pass_low or pass_up)
-    if (pass_length and pass_low and pass_up):
+    pass_num = re.search(r"[0-9]", client_pass) is not None
+    pass_ok = not (pass_length or pass_low or pass_up or pass_num)
+    if (pass_length and pass_low and pass_up and pass_num):
         return True
     else:
         return False
