@@ -35,13 +35,12 @@ class LogoutView(AuthenticatedUser):
         logout_user()
         return redirect('/admin')
         
-class AdminView(ModelView):
+class AdminView(AuthenticatedAdmin):
   can_delete = False
   can_edit = False
   can_create = True
 
 class BookingView(AuthenticatedAdmin):
-    column_display_all_relations = True
     column_list = ['id', 'guest_id', 'bookingstatus', 'num_guest', 'has_foreigner', 'booking_price',
                    'check_in', 'check_out', 'created_at', 'phone']    
     column_searchable_list = ['guest_id', 'status_id', 'num_guest', 'has_foreigner', 'booking_price',
@@ -53,7 +52,7 @@ class BookingView(AuthenticatedAdmin):
     can_edit = True
 
 class StatusView(AuthenticatedAdmin):
-    column_list = ['id', 'status', 'bookings']    
+    column_list = ['id', 'status']    
     column_searchable_list = ['status']
     column_editable_list = ['status']
 
