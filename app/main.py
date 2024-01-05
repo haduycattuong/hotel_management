@@ -209,7 +209,6 @@ def room_list():
 
 
 @app.route('/admin/login', methods=['post'])
-@login_required
 def login_admin_process():
     username = request.form.get('username')
     password = request.form.get('password')
@@ -224,19 +223,20 @@ def login_admin_process():
 @app.route('/register', methods=['get', 'post'])
 def register_user():
     err_msg = ""
-    name = request.form.get('name')
-    username = request.form.get('username')
-    password = request.form.get('password')
-    confirm_pass = request.form.get('confirm-pass')
 
-    user_exists = User.query.filter_by(username=username).first() is not None
-    if password.__eq__(confirm_pass) and user_exists:
-        try:
-            dao.register(name=name, username=username, password=password)
-        except:
-            err_msg = 'System Error'
-    else:
-        err_msg = 'Password didnt match!'
+    if request.method.__eq__('POST'):
+        password = request.form.get('password')
+        confirm_pass = request.form.get('confirm-pass')
+        if password.__eq__(confirm_pass):
+            try:
+                dao.add_user(name=request.form.get('name'),
+                             username=request.form.get('username'),
+                             password=password)
+                return redirect('/login')
+            except:
+                err_msg = 'System Error'
+        else:
+            err_msg = "Password didnt match"
     return render_template('register.html', err_msg=err_msg)
 
 

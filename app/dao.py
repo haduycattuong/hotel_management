@@ -246,7 +246,11 @@ def register(name, username, password, avatar):
     else:
         raise Exception("Username is already exists") 
 
-
+def add_user(name, username, password):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    u = User(name=name, username=username, password=password)
+    db.session.add(u)
+    db.session.commit()
 
 def strong_pass(client_pass):
     pass_length = len(client_pass) > 6
