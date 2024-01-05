@@ -106,12 +106,6 @@ def create_booking_status(status):
         raise Exception("Status is already exists")
 
 
-def get_rooms_by_types(type_id=None):
-    rooms = Room.query.all()
-    if type_id:
-        rooms = Room.query.filter(Room.type_id.__eq__(type_id))
-
-    return rooms.all()
 
 def get_type_by_price(price=None):
     types = RoomType.query.all()
@@ -125,6 +119,7 @@ def get_rooms_by_id(room_id):
 
 def get_rooms_by_kw(kw, room_type_id, page=None):
     rooms = Room.query
+    room_type = RoomType.query
     if kw:
         rooms = rooms.filter(Room.name.contains(kw))
 

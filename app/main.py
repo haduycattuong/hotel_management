@@ -15,16 +15,7 @@ def admin_rooms():
     return render_template('admin/room.html', rooms=rooms)
 
     
-@app.route('/admin/roomtypes', methods=['get', 'post'])
-def admin_room_type():
-    room_type = dao.get_room_types()
-    return render_template('admin/room_type.html', room_type=room_type)
 
-
-@app.route('/admin/addprice', methods=['get', 'post'])
-def admin_add_price():
-    add_price = dao.get_add_price()
-    return render_template('admin/add_price.html', add_price=add_price)
 
 
 @app.route('/admin/bookings', methods=['get', 'post'])
@@ -38,7 +29,7 @@ def admin_payment():
     payments = dao.get_payment()
     return render_template('admin/payment.html', payments=payments)
 
-@app.route('/admin/guests', methods=['get', 'post'])
+@app.route('/guests', methods=['get', 'post'])
 def admin_guest():
     guests = dao.get_guests()
     return render_template('admin/guest.html', guests=guests)
@@ -83,80 +74,6 @@ def admin_create_guest():
     err_msg = "Guest create successully"
     return render_template('add_guest.html', err_msg=err_msg)
 
-# @app.route('/admin/create-room', methods=['get', 'post'])
-# def admin_create_room():
-#     err_msg = ""
-#     name = request.form.get('name')
-#     img = request.form.get('img')
-#     foreigner_rate = request.form.get('foreigner_rate')
-#     room_type_id = request.form.get('room_type_id')
-#     add_price_id = request.form.get('add_price_id')
-
-#     name_exists = Room.query.filter_by(name=name).first() is not None
-#     room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
-#                              type_id=room_type_id, add_price_id=add_price_id)
-#     err_msg = "Room create successully"
-#     return render_template('add_room.html', err_msg=err_msg)
-
-# @app.route('/admin/create-room', methods=['get', 'post'])
-# def admin_create_room():
-#     err_msg = ""
-#     name = request.form.get('name')
-#     img = request.form.get('img')
-#     foreigner_rate = request.form.get('foreigner_rate')
-#     room_type_id = request.form.get('room_type_id')
-#     add_price_id = request.form.get('add_price_id')
-
-#     name_exists = Room.query.filter_by(name=name).first() is not None
-#     room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
-#                              type_id=room_type_id, add_price_id=add_price_id)
-#     err_msg = "Room create successully"
-#     return render_template('add_room.html', err_msg=err_msg)
-
-# @app.route('/admin/create-room', methods=['get', 'post'])
-# def admin_create_room():
-#     err_msg = ""
-#     name = request.form.get('name')
-#     img = request.form.get('img')
-#     foreigner_rate = request.form.get('foreigner_rate')
-#     room_type_id = request.form.get('room_type_id')
-#     add_price_id = request.form.get('add_price_id')
-
-#     name_exists = Room.query.filter_by(name=name).first() is not None
-#     room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
-#                              type_id=room_type_id, add_price_id=add_price_id)
-#     err_msg = "Room create successully"
-#     return render_template('add_room.html', err_msg=err_msg)
-
-# @app.route('/admin/create-room', methods=['get', 'post'])
-# def admin_create_room():
-#     err_msg = ""
-#     name = request.form.get('name')
-#     img = request.form.get('img')
-#     foreigner_rate = request.form.get('foreigner_rate')
-#     room_type_id = request.form.get('room_type_id')
-#     add_price_id = request.form.get('add_price_id')
-
-#     name_exists = Room.query.filter_by(name=name).first() is not None
-#     room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
-#                              type_id=room_type_id, add_price_id=add_price_id)
-#     err_msg = "Room create successully"
-#     return render_template('add_room.html', err_msg=err_msg)
-
-# @app.route('/admin/create-room', methods=['get', 'post'])
-# def admin_create_room():
-#     err_msg = ""
-#     name = request.form.get('name')
-#     img = request.form.get('img')
-#     foreigner_rate = request.form.get('foreigner_rate')
-#     room_type_id = request.form.get('room_type_id')
-#     add_price_id = request.form.get('add_price_id')
-
-#     name_exists = Room.query.filter_by(name=name).first() is not None
-#     room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
-#                              type_id=room_type_id, add_price_id=add_price_id)
-#     err_msg = "Room create successully"
-#     return render_template('add_room.html', err_msg=err_msg)
 # Booking site
 @app.route("/<int:type_id>")
 def load_rooms():
@@ -181,23 +98,38 @@ def hotel_index():
 def booking():
     room_type = dao.get_room_types()
     rooms = dao.get_rooms()
-    return render_template('hotel/booking1.html', room_type=room_type)
+    return render_template('hotel/booking1.html', room_type=room_type, rooms=rooms)
 
 
+# @app.route("/")
+# def index():
+#     kw = request.args.get('kw')
+#     room_id = request.args.get('room_id')
+#     page = request.args.get('page')
+
+#     room_type = dao.get_room_types_by_kw(kw, room_id, page)
+    
+
+#     num = dao.count_room_types()
+#     page_size = app.config['PAGE_SIZE']
+
+#     return render_template('index.html',
+#                            room_type=room_type, pages=math.ceil(num/app.config['PAGE_SIZE']))
+
+                           
 @app.route("/")
 def index():
     kw = request.args.get('kw')
-    room_id = request.args.get('room_id')
+    room_type_id = request.args.get('room_type_id')
     page = request.args.get('page')
 
-    room_type = dao.get_room_types_by_kw(kw, room_id, page)
+    rooms = dao.get_rooms_by_kw(kw, room_type_id, page)
     
 
     num = dao.count_room_types()
-    page_size = app.config['PAGE_SIZE']
 
     return render_template('index.html',
-                           room_type=room_type, pages=math.ceil(num/app.config['PAGE_SIZE']))
+                           rooms=rooms, pages=math.ceil(num/app.config['PAGE_SIZE']))
 
 @app.route("/rooms")
 def room_list():
@@ -226,15 +158,20 @@ def register_user():
 
     if request.method.__eq__('POST'):
         password = request.form.get('password')
+        username = request.form.get('username')
         confirm_pass = request.form.get('confirm-pass')
+        user_exists = User.query.filter_by(username=username).first is not None
         if password.__eq__(confirm_pass):
-            try:
-                dao.add_user(name=request.form.get('name'),
-                             username=request.form.get('username'),
+            if user_exists:
+                try:
+                    dao.add_user(name=request.form.get('name'),
+                             username=username,
                              password=password)
-                return redirect('/login')
-            except:
-                err_msg = 'System Error'
+                    return redirect(url_for('login_user_process'))
+                except:
+                    err_msg = "System Error"
+            else:
+                err_msg = "Username already exists"
         else:
             err_msg = "Password didnt match"
     return render_template('register.html', err_msg=err_msg)

@@ -9,7 +9,9 @@
 {% endblock %}
 {% block js %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
@@ -34,7 +36,7 @@
                     </label>
                     <div class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative">
                         <input type="datetime-local" class="form-control" id="checkInDate"
-                               name="checkInDate" onchange="compareDate()" required>
+                               name="checkInDate" onchange="compareDate(); compareBookingDate()" required>
                         <div class="checkInDate" id="checkInDate"></div>
                     </div>
                 </div>
@@ -43,7 +45,7 @@
                     </label>
                     <div class="d-flex align-items-center flex-fill me-sm1 my-sm-0 border-bottom position-relative">
                         <input type="datetime-local" class="form-control" id="checkOutDate"
-                               name="checkOutDate" onchange="compareDate()" required>
+                               name="checkOutDate" onchange="compareDate(); compareBookingDate()" required>
                         <div class="checkOutDat" id="checkOutDate"></div>
                     </div>
                     </div>
@@ -51,8 +53,8 @@
             </div>
              <div class="mb-3 mt-3 sm-1 w-50" style="display:flex">
                 <select class="form-select mt-3 mb-3" aria-label="Default select example">
-                    <option selected>Select room type</option>
-                    {% for r in room_type %}
+                    <option selected>Select room</option>
+                    {% for r in rooms %}
                         <option value="{{r}}">{{r}}</option>
                     {% endfor %}
                   </select>
@@ -111,40 +113,59 @@
         </div>
 </div>
 <script>
-    $('#arriveDate').prop('min', function(){
+    $('#checkInDate').prop('min', function(){
        return new Date().toJSON().split('T')[0];
     });
-    $('#departureDate').prop('min', function(){
+    $('#checkOutDate').prop('min', function(){
        return new Date().toJSON().split('T')[0];
     });
     function compareBookingDate() {
-        var bookingDate = new Date.now();
-        var checkOut = document.getElementById("checkOutDate").value;
-        if ((bookingDate.getTime() - new Date(checkIn).getTime()) > 28) {
-              alert("Check out date should not over 28 day from booking date");
-              document.getElementById("checkOutDate").value = null;
+        var timeStamp = new Date().getTime() + (28 * 24 * 60 * 60 * 1000)  
+        var checkIn = document.getElementById("checkInDate").value;
+        checkIn = new Date(Date.parse(checkIn));
+        var today = new Date();
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+        today.setMilliseconds(0);
+        var next28Day = new Date(today.getTime());
+        next28Day.setDate(next28Day.getDate() + 28);
+        if (checkIn < today) {
+              alert("Check in date should not from the past");
+              document.getElementById("checkInDate").value = null;
               return false;
-         }
+        }
+        if (checkIn >= next28Day) {
+              alert("Check in date should not over 28 day from booking date");
+              document.getElementById("checkInDate").value = null;
+              return false;
+        }
+        return true;
     }
 
 
    function compareDate() {
        var checkIn = document.getElementById("checkInDate").value;
        var checkOut = document.getElementById("checkOutDate").value;
-       if ((new Date(checkOut).getTime() - new Date(checkIn).getTime()) > 28) {
-             alert("Check out date should not over 28 day from check in date");
-             document.getElementById("checkOutDate").value = null;
-             document.getElementById("checkInDate").value = null;
-             return false;
-        }
        if (new Date(checkIn).getTime() > new Date(checkOut).getTime()) {
-             alert("Check out date must be bigger than check in date");
+             alert("Check out date must be after check in date");
              document.getElementById("checkOutDate").value = null;
              document.getElementById("checkInDate").value = null;
              return false;
         }
        return true;
    }
+   function compareDate28Days() {
+    var checkIn = document.getElementById("checkInDate").value;
+    var checkOut = document.getElementById("checkOutDate").value;
+    if (new Date(checkOut).getTime() - new Date(checkIn).getTime() > 28) {
+          alert("Check out date must not longer than 28 days ");
+          document.getElementById("checkOutDate").value = null;
+          document.getElementById("checkInDate").value = null;
+          return false;
+     }
+    return true;
+}
 </script>
 
 {% endblock %}

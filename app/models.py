@@ -200,14 +200,14 @@ if __name__ == '__main__':
         # db.session.commit()
 
         
-        # room1 = Room(name='101', foreigner_rate=1.5, type_id=1)
-        # room2 = Room(name='102', foreigner_rate=1.5, type_id=2)
-        # room3 = Room(name='103', foreigner_rate=1.5, type_id=3)
-        # room4 = Room(name='201', foreigner_rate=1.5, type_id=4)
-        # room5 = Room(name='202', foreigner_rate=1.5, type_id=2)
-        # room6 = Room(name='203', foreigner_rate=1.5, type_id=1)
-        # room7 = Room(name='301', foreigner_rate=1.5, type_id=1)
-        # room8 = Room(name='302', foreigner_rate=1.5, type_id=5)
+        # room1 = Room(name='101', foreigner_rate=1.5, type_id=1, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/vs2oaxymlefekgmmi6tl.jpg')
+        # room2 = Room(name='102', foreigner_rate=1.5, type_id=2, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/knphsg4zwjxpppesksrm.jpg')
+        # room3 = Room(name='103', foreigner_rate=1.5, type_id=3, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092592/lccma7yonocxj3brpmj8.jpg')
+        # room4 = Room(name='201', foreigner_rate=1.5, type_id=4, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092592/b0letho5eeakz3jawakw.jpg')
+        # room5 = Room(name='202', foreigner_rate=1.5, type_id=2, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/knphsg4zwjxpppesksrm.jpg')
+        # room6 = Room(name='203', foreigner_rate=1.5, type_id=1, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/vs2oaxymlefekgmmi6tl.jpg')
+        # room7 = Room(name='301', foreigner_rate=1.5, type_id=1, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092591/vs2oaxymlefekgmmi6tl.jpg')
+        # room8 = Room(name='302', foreigner_rate=1.5, type_id=5, img='https://res.cloudinary.com/dzvzu6udg/image/upload/v1704092592/osyhglnk6eerlfgynuiz.jpg')
         # db.session.add_all([room1, room2, room3, room4, room5, room6, room7, room8])
         # db.session.commit()
 

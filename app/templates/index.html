@@ -3,14 +3,14 @@
 {% block content %}
 <section class="container">
     <div class="row">
-        {% for type in room_type %}
+        {% for r in rooms %}
         <div class="col-xs-12 col-md-4" style="padding: 10px; margin-top: 20px;">
             <div class="card">
-                <img class="card-img-top" src="{{ type.img }}" alt="Card image">
+                <img class="card-img-top" src="{{ r.img }}" alt="Card image">
                 <div class="card-body">
-                    <h4 class="card-title">{{ type.type }}</h4>
-                    <p class="card-text">{{ type.price }}$</p>
-                    <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                    <h4 class="card-title">{{ r.name }}</h4>
+                    <h4 class="card-title">{{ r.roomtype.type }}</h4>
+                    <p class="card-text">{{ r.roomtype.price }}$</p>
                     <a href="/bookings" class="btn btn-danger">Book</a>
                 </div>
             </div>
