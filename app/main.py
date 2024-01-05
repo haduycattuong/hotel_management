@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, session, jsonify, url_for
+from flask import render_template, request, redirect, session, jsonify, url_for, sessions
 from app.models import * 
 import dao
 from wtforms import Form
@@ -18,10 +18,7 @@ def admin_rooms():
 
 
 
-@app.route('/admin/bookings', methods=['get', 'post'])
-def admin_bookings():
-    bookings = dao.get_bookings()
-    return render_template('admin/booking.html', bookings=bookings)
+
 
 
 @app.route('/admin/payments', methods=['get', 'post'])
@@ -75,19 +72,6 @@ def admin_create_guest():
     return render_template('add_guest.html', err_msg=err_msg)
 
 # Booking site
-@app.route("/<int:type_id>")
-def load_rooms():
-    kw = request.args.get('kw')
-    room_type_id = request.args.get('room_type_id')
-    page = request.args.get('page')
-
-    rooms = dao.get_rooms_by_kw(kw, room_type_id, page)
-
-    num = dao.count_rooms()
-    page_size = app.config['PAGE_SIZE']
-
-    return render_template('index.html', 
-                           rooms=rooms, pages=math.ceil(num/app.config['PAGE_SIZE']))
 
 @app.route('/hotel')
 def hotel_index():
@@ -100,6 +84,9 @@ def booking():
     rooms = dao.get_rooms()
     return render_template('hotel/booking1.html', room_type=room_type, rooms=rooms)
 
+@app.route('/bookings/<int:room_id>')
+def booking_room():
+    room = dao.get_rooms_by_id()
 
 # @app.route("/")
 # def index():
@@ -121,23 +108,15 @@ def booking():
 def index():
     kw = request.args.get('kw')
     room_type_id = request.args.get('room_type_id')
+    room_id = request.args.get('room_id')
     page = request.args.get('page')
 
     rooms = dao.get_rooms_by_kw(kw, room_type_id, page)
-    
 
-    num = dao.count_room_types()
+    num = dao.count_rooms()
 
-    return render_template('index.html',
+    return render_template('index.html', 
                            rooms=rooms, pages=math.ceil(num/app.config['PAGE_SIZE']))
-
-@app.route("/rooms")
-def room_list():
-    room_type_id = request.args.get('room_type_id')
-
-    rooms = dao.get_rooms_by_types(type_id=room_type_id)
-
-    return render_template('hotel/room.html', rooms=rooms)
 
 
 @app.route('/admin/login', methods=['post'])
@@ -176,6 +155,31 @@ def register_user():
             err_msg = "Password didnt match"
     return render_template('register.html', err_msg=err_msg)
 
+@app.route('/booking-guest/create', methods=['get','post'])
+def create_booking_guest():
+    err_msg = ""
+    if request.method.__eq__('POST'):
+        first_name= request.form.get('firstname')
+        last_name = request.form.get('lastname')
+        cccd = request.form.get('cccd')
+        phone = request.form.get('phone')
+        check_in = request.form.get('checkInDate')
+        check_out = request.form.get('checkOutDate')
+        room_id = request.args.get('room_id')
+        description = request.form.get('description')
+        num_guest = request.form.get('num-guest')
+        has_foreigner = request.form.get('has-foreigner')
+        try:
+            dao.add_guest(first_name=first_name, last_name=last_name, 
+                          cccd=cccd, phone=phone)
+            db.session.flush()
+            dao.add_booking(check_in=check_in, check_out=check_out, room_id=room_id,
+                            description=description, num_guest=num_guest, has_foreigner=has_foreigner)
+        except:
+            db.session.rollback()
+            err_msg = "System error cant create booking"
+    return render_template('hotel/booking1.html', err_msg=err_msg)
+    
 
 @app.route('/login', methods=['get', 'post'])
 def login_user_process():

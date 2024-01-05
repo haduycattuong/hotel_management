@@ -214,14 +214,6 @@ def get_booked_rooms():
    rooms = Room.query.get(id) 
 
 
-def create_guest(first_name, last_name, cccd, phone):
-    pass
-
-def create_booking(check_in, check_out, phone, room_id):
-    room = Room.query.get()
-
-
-
 
 def register(name, username, password, avatar):
     users = []
@@ -247,12 +239,22 @@ def add_user(name, username, password):
     db.session.add(u)
     db.session.commit()
 
+def add_guest(first_name, last_name, cccd, phone):
+    g = Guest(first_name=first_name, last_name=last_name, cccd=cccd, phone=phone)
+    db.session.add(g)
+    db.session.commit()
+
+def add_booking(check_in, check_out, num_guest, phone, room_id, description, has_foreigner):
+    b = Booking(check_in=check_in, check_out=check_out, room_id=room_id, 
+                phone=phone, num_guest=num_guest, description=description, has_foreigner=has_foreigner)
+    db.session.add(b)
+    db.session.commit()
+
 def strong_pass(client_pass):
     pass_length = len(client_pass) > 6
     pass_up = re.search(r"[A-Z]", client_pass) is not None
     pass_low = re.search(r"[a-z]", client_pass) is not None
     pass_num = re.search(r"[0-9]", client_pass) is not None
-    pass_ok = not (pass_length or pass_low or pass_up or pass_num)
     if (pass_length and pass_low and pass_up and pass_num):
         return True
     else:

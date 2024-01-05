@@ -99,7 +99,7 @@ class Booking(db.Model):
     __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True, autoincrement=True)
 
-    guest_id = Column(Integer, ForeignKey(Guest.id), nullable=False)
+    guest_id = Column(Integer, ForeignKey(Guest.id), nullable=False, default=1)
     status_id = Column(Integer, ForeignKey(BookingStatus.id), nullable=False, default=1)
     booked_room = relationship('BookedRoom', backref='booking', lazy=True)
 
@@ -219,14 +219,17 @@ if __name__ == '__main__':
         #                    num_guest=3, has_foreigner=True)
         # booking4 = Booking(guest_id=2, status_id=3, check_in='2023-11-20', check_out='2023-11-24',
         #                    num_guest=2, has_foreigner=False)
-        # db.session.add_all([booking1, booking2, booking3, booking4])
+        # booking5 = Booking(guest_id=1, status_id=3, check_in='2023-11-20', check_out='2023-11-25',
+        #                    num_guest=3, has_foreigner=False)
+        # db.session.add_all([booking1, booking2, booking3, booking4, booking5])
         # db.session.commit()
 
-        # bookedroom1 = BookedRoom(booking_id=1, room_id=1)
-        # bookedroom2 = BookedRoom(booking_id=2, room_id=3)
-        # bookedroom3 = BookedRoom(booking_id=3, room_id=4)
-        # bookedroom4 = BookedRoom(booking_id=4, room_id=2)
-        # db.session.add_all([bookedroom1, bookedroom2, bookedroom3, bookedroom4])
+        # bookedroom1 = BookedRoom(booking_id=1, room_id=1, price=281.5)
+        # bookedroom2 = BookedRoom(booking_id=2, room_id=3, price=562.5)
+        # bookedroom3 = BookedRoom(booking_id=3, room_id=4, price=750)
+        # bookedroom4 = BookedRoom(booking_id=4, room_id=2, price=375)
+        # bookedroom5 = BookedRoom(booking_id=5, room_id=2, price=375)
+        # db.session.add_all([bookedroom1, bookedroom2, bookedroom3, bookedroom4, bookedroom5])
         # db.session.commit()
         
         # pay_method1 = PaymentMethod(method='Credit Card')

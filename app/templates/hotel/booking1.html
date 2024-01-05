@@ -53,21 +53,21 @@
             </div>
              <div class="mb-3 mt-3 sm-1 w-50" style="display:flex">
                 <select class="form-select mt-3 mb-3" aria-label="Default select example">
-                    <option selected>Select room</option>
+                    <option selected id="room">Select room</option>
                     {% for r in rooms %}
                         <option value="{{r}}">{{r}}</option>
                     {% endfor %}
                   </select>
                 <div class="col-md-5">
                     <div class="form-floating mb-3 mt-3 ml-3">
-                        <input type="number" value="1" class="form-control" id="guest" name="guest" >
-                        <label for="guest">Guest</label>
+                        <input type="number" value="1" class="form-control" id="num-guest" name="num-guest" >
+                        <label for="guest">Number of Guest</label>
                     </div>
                 </div>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="hasForeigner">
-                <label class="form-check-label" for="hasForeigner">
+                <input class="form-check-input" type="checkbox" value="" id="has-foreigner">
+                <label class="form-check-label" for="has-foreigner">
                      Has foreigner?
                 </label>
             </div>
@@ -108,7 +108,7 @@
                 </div>
             </div>
             <div class="display">
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success" onclick="book()">Submit</button>
             </div>
         </div>
 </div>
@@ -165,7 +165,19 @@
           return false;
      }
     return true;
-}
+    }
+    function book() {
+        if (confirm("Are you sure?") === true) {
+            fetch("/booking-guest/create", {
+                method: "post"
+            }).then(res => res.json()).then(data => {
+                if (data.status === 200)
+                    location.reload();
+                else
+                    alert(data.err_msg);
+            })
+        }
+    }
 </script>
 
 {% endblock %}

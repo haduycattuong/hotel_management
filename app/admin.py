@@ -76,8 +76,8 @@ class RoomTypeView(AuthenticatedAdmin):
     can_create = True
 
 class PaymentView(AuthenticatedAdmin):
-    column_list = ['id', 'price', 'description']    
-    column_searchable_list = ['total_price']
+    column_list = ['id','description', 'total_price', 'created_at']    
+    column_searchable_list = ['id']
     column_editable_list = ['description', 'total_price']
 
     can_delete = True
@@ -86,7 +86,7 @@ class PaymentView(AuthenticatedAdmin):
     can_export = True
 
 class PaymentMethodView(AuthenticatedAdmin):
-    column_list = ['method']    
+    column_list = ['id', 'method']    
     column_searchable_list = ['method']
     column_editable_list = ['method']
 
@@ -96,7 +96,7 @@ class PaymentMethodView(AuthenticatedAdmin):
 
 
 class GuestView(AuthenticatedAdmin):
-    column_list = ['id', 'first_name', 'last_name', 'cccd', 'address']    
+    column_list = ['id', 'first_name', 'last_name', 'cccd', 'address', 'bookings']    
     column_searchable_list = ['first_name', 'last_name', 'cccd', 'address']
     column_editable_list = ['first_name', 'last_name', 'cccd', 'address']
 
@@ -107,7 +107,7 @@ class GuestView(AuthenticatedAdmin):
 class BookedRoomView(AuthenticatedAdmin):
     column_list = ['booking_id', 'room_id', 'price', 'created_at']    
     column_searchable_list = ['booking_id', 'room_id', 'price', 'created_at']
-    column_editable_list = ['booking_id', 'room_id', 'price']
+    column_editable_list = ['price']
 
     can_delete = True
     can_edit = True
@@ -120,7 +120,7 @@ admin.add_view(RoomTypeView(RoomType, db.session))
 admin.add_view(GuestView(Guest, db.session))
 admin.add_view(PaymentView(Payment, db.session))
 admin.add_view(PaymentMethodView(PaymentMethod, db.session))
-admin.add_view(ModelView(BookedRoom, db.session))
+admin.add_view(BookedRoomView(BookedRoom, db.session))
 admin.add_view(BookingView(Booking, db.session))
 admin.add_view(StatusView(BookingStatus, db.session))
 admin.add_view(StatsView(name='REPORT'))
