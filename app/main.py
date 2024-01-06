@@ -42,34 +42,34 @@ def update_rooms():
         rooms.type_id = request.form['type_id']
         rooms.add_price_id = request.form['add_price_id']
     
-@app.route('/admin/create-room', methods=['get', 'post'])
-def admin_create_room():
-    err_msg = ""
-    name = request.form.get('name')
-    img = request.form.get('img')
-    foreigner_rate = request.form.get('foreigner_rate')
-    room_type_id = request.form.get('room_type_id')
-    add_price_id = request.form.get('add_price_id')
+# @app.route('/admin/create-room', methods=['get', 'post'])
+# def admin_create_room():
+#     err_msg = ""
+#     name = request.form.get('name')
+#     img = request.form.get('img')
+#     foreigner_rate = request.form.get('foreigner_rate')
+#     room_type_id = request.form.get('room_type_id')
+#     add_price_id = request.form.get('add_price_id')
 
-    name_exists = Room.query.filter_by(name=name).first() is not None
-    room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
-                             type_id=room_type_id, add_price_id=add_price_id)
-    err_msg = "Room create successully"
-    return render_template('add_room.html', err_msg=err_msg)
+#     name_exists = Room.query.filter_by(name=name).first() is not None
+#     room = dao.create_room(name=name, img=img, foreigner_rate=foreigner_rate,
+#                              type_id=room_type_id, add_price_id=add_price_id)
+#     err_msg = "Room create successully"
+#     return render_template('add_room.html', err_msg=err_msg)
     
-@app.route('/admin/create-guest', methods=['get', 'post'])
-def admin_create_guest():
-    err_msg = ""
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    cccd = request.form.get('cccd')
-    phone = request.form.get('phone')
+# @app.route('/admin/create-guest', methods=['get', 'post'])
+# def admin_create_guest():
+#     err_msg = ""
+#     first_name = request.form.get('first_name')
+#     last_name = request.form.get('last_name')
+#     cccd = request.form.get('cccd')
+#     phone = request.form.get('phone')
 
-    guest_exists = Guest.query.filter_by(cccd=cccd).first() is not None
-    guest = dao.create_guest(first_name=first_name, last_name=last_name, 
-                             cccd=cccd, phone=phone)
-    err_msg = "Guest create successully"
-    return render_template('add_guest.html', err_msg=err_msg)
+#     guest_exists = Guest.query.filter_by(cccd=cccd).first() is not None
+#     guest = dao.create_guest(first_name=first_name, last_name=last_name, 
+#                              cccd=cccd, phone=phone)
+#     err_msg = "Guest create successully"
+#     return render_template('add_guest.html', err_msg=err_msg)
 
 # Booking site
 
@@ -163,8 +163,8 @@ def create_booking_guest():
         last_name = request.form.get('lastname')
         cccd = request.form.get('cccd')
         phone = request.form.get('phone')
-        check_in = request.form.get('checkInDate')
-        check_out = request.form.get('checkOutDate')
+        check_in = datetime.strptime(request.form['checkInDate'], '%d-%m-%Y')
+        check_out = datetime.strptime(request.form['checkOutDate'], '%d-%m-%Y')
         room_id = request.args.get('room_id')
         description = request.form.get('description')
         num_guest = request.form.get('num-guest')
